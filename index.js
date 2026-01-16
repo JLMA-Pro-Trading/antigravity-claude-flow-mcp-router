@@ -53,7 +53,10 @@ function startBackend() {
     backendProcess.stderr.on('data', (d) => process.stderr.write(`[Backend] ${d}`));
 
     backendProcess.on('close', (code) => {
-        process.stderr.write(`[${config.name}] Backend closed (code ${code}). Restarting in 1s...\n`);
+        const msg = `[${config.name}] Backend CRASHED/CLOSED (code ${code}). Memory state LOST. Restarting in 1s...\n`;
+        process.stderr.write(msg);
+        // Notify client of the crash using a log message or error if possible
+        process.stdout.write(JSON.stringify({ jsonrpc: '2.0', method: 'notifications/message', params: { level: 'error', data: msg } }) + '\n');
         isReady = false;
         setTimeout(startBackend, 1000);
     });
@@ -61,15 +64,32 @@ function startBackend() {
 
 function handleBackendStdout(data) {
     stdoutBuffer += data.toString();
-    const lines = stdoutBuffer.split('\n');
-    stdoutBuffer = lines.pop();
+
+    // Process strictly by lines first
+    let lines = stdoutBuffer.split('\n');
+
+    // Keep the last partial line in the buffer
+    // If the data ends exactly with \n, the last element is empty string, which is fine to keep as buffer base
+    if (!stdoutBuffer.endsWith('\n')) {
+        stdoutBuffer = lines.pop();
+    } else {
+        stdoutBuffer = '';
+    }
 
     for (const line of lines) {
-        if (!line.trim()) continue;
-        if (!line.trim().startsWith('{')) continue; // Filter logs
+        const trimmed = line.trim();
+        if (!trimmed) continue;
+
+        // ROBUSTNESS FIX: Stdout Pollution Handling
+        // Instead of requiring line.startsWith('{'), we look for the first '{' 
+        // and try to parse from there. This handles "INFO: {json}" cases.
+        const openBrace = line.indexOf('{');
+        if (openBrace === -1) continue; // No JSON possible
+
+        const potentialJson = line.substring(openBrace);
 
         try {
-            const parsed = JSON.parse(line);
+            const parsed = JSON.parse(potentialJson);
 
             // Internal Handshake
             if (parsed.method === 'server.initialized') {
@@ -104,10 +124,11 @@ function handleBackendStdout(data) {
             // Orphan Error Filtering
             if (parsed.error && !internalCallbacks.has(parsed.id) && parsed.id === null) continue;
 
-            // Forward
-            process.stdout.write(line + '\n');
+            // Forward to Client
+            process.stdout.write(JSON.stringify(parsed) + '\n');
         } catch (e) {
-            // Ignore parse errors
+            // Attempt recovery: sometimes multiple JSONs or JSON + noise exist.
+            // For now, simple suffix extraction is a huge improvement over "startsWith or die".
         }
     }
 }

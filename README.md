@@ -35,7 +35,15 @@ Complex servers often print `[INFO]` or `[WARN]` logs directly to `stdout`.
 - **The Bug**: `invalid character '[' looking for beginning of value`.
 - **The Fix**: The router sanitizes the stream, passing only valid JSON-RPC to the client and redirecting noise to `stderr`.
 
-### 3. Agent Communication Ambiguity (Semantic Drift)
+### 3. Industrial Robustness & "No-Silence" Recovery
+Advanced servers often restart silently when they hit internal limits, leading to lost agent state ("Agent not found" errors).
+- **The Problem**: A 10-hop pipeline fails if any link in the chain resets without the orchestrator's knowledge.
+- **The Solution**: 
+    - **Robust JSON Extraction**: Parses JSON-RPC even if prefixed by logs (Fixes Stdout Pollution).
+    - **Crash Visibility**: Notifies the client immediately if a backend crash occurs, preventing silent memory wipes.
+- **Documentation**: See [GITHUB_ISSUE_MCP_ROBUSTNESS.md](docs/GITHUB_ISSUE_MCP_ROBUSTNESS.md) for the full technical breakdown of the 5 critical fixes.
+
+### 4. Agent Communication Ambiguity (Semantic Drift)
 Multi-agent pipelines suffer from semantic drift—each agent interprets instructions slightly differently, compounding errors.
 - **The Problem**: Natural language has 40-65% ambiguity. A 10-hop pipeline has only 0.84% success rate.
 - **The Solution**: AISP 5.1 enforcement reduces ambiguity to <2%, achieving 81.7% success rate (97× improvement).

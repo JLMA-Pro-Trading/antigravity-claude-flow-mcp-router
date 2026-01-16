@@ -12,7 +12,8 @@ export default {
         { name: "cf_hooks", description: "Hooks & Intelligence", inputSchema: { type: "object", properties: { action: { type: "string" }, params: { type: "object" } }, required: ["action"] } },
         { name: "cf_analyze", description: "Analysis operations", inputSchema: { type: "object", properties: { action: { type: "string" }, params: { type: "object" } }, required: ["action"] } },
         { name: "cf_hive", description: "Hive-mind operations", inputSchema: { type: "object", properties: { action: { type: "string" }, params: { type: "object" } }, required: ["action"] } },
-        { name: "cf_execute", description: "Execute ANY tool", inputSchema: { type: "object", properties: { tool: { type: "string" }, params: { type: "object" } }, required: ["tool"] } }
+        { name: "cf_execute", description: "Execute ANY tool", inputSchema: { type: "object", properties: { tool: { type: "string" }, params: { type: "object" } }, required: ["tool"] } },
+        { name: "aisp_status", description: "Get AISP enforcement status and configuration", inputSchema: { type: "object", properties: {} } }
     ],
     mapToRealTool: (metaTool, action) => {
         const map = { cf_agent: 'agent', cf_swarm: 'swarm', cf_memory: 'memory', cf_task: 'task', cf_workflow: 'workflow', cf_hooks: 'hooks', cf_analyze: 'analyze', cf_hive: 'hive-mind' };

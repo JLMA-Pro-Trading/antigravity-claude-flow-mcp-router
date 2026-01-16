@@ -9,6 +9,7 @@
 import { spawn } from 'child_process';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { injectAISPContext, isAgentToAgent, getAISPStatus } from './aisp-enforcer.js';
 
 // Load Config
 const args = process.argv.slice(2);
@@ -157,15 +158,30 @@ function handleAntigravityStdin(data) {
                     return;
                 }
 
-                // Execute
-                let realTool = name;
-                if (name.endsWith('_execute')) {
-                    realTool = args.tool;
-                } else if (config.mapToRealTool) {
-                    realTool = config.mapToRealTool(name, args.action);
+                // AISP Status Tool
+                if (name === 'aisp_status') {
+                    reply(parsed.id, { content: [{ type: 'text', text: JSON.stringify(getAISPStatus(), null, 2) }] });
+                    continue;
                 }
 
-                queueOrExecuteTool(parsed.id, realTool, name.endsWith('_execute') ? (args.params || {}) : (args.params || {}));
+                // Execute
+                let realTool = name;
+                let toolArgs = args;
+
+                if (name.endsWith('_execute')) {
+                    realTool = args.tool;
+                    toolArgs = args.params || {};
+                } else if (config.mapToRealTool) {
+                    realTool = config.mapToRealTool(name, args.action);
+                    toolArgs = args.params || {};
+                } else {
+                    toolArgs = args.params || {};
+                }
+
+                // Inject AISP context for agent-to-agent calls
+                toolArgs = injectAISPContext(realTool, toolArgs);
+
+                queueOrExecuteTool(parsed.id, realTool, toolArgs);
                 continue;
             }
 

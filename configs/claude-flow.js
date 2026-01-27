@@ -1,3 +1,12 @@
+/**
+ * Claude-Flow Backend Configuration
+ * 
+ * Minimal passthrough config - no tool routing needed.
+ * Backend exposes tools directly to client.
+ * 
+ * REQUIRES: claude-flow@alpha >= v3.0.0-alpha.119
+ */
+
 export default {
     name: "claude-flow",
     backendCommand: "npx",
@@ -5,22 +14,5 @@ export default {
     backendEnv: {
         CLAUDE_FLOW_MODE: "v3",
         CLAUDE_FLOW_MEMORY_BACKEND: "hybrid"
-    },
-    routerTools: [
-        { name: "cf_discover", description: "List all available claude-flow tools by category or search.", inputSchema: { type: "object", properties: { category: { type: "string" }, search: { type: "string" } } } },
-        { name: "cf_agent", description: "Agent operations", inputSchema: { type: "object", properties: { action: { type: "string", enum: ["spawn", "terminate", "status", "list", "pool", "health", "update"] }, params: { type: "object" } }, required: ["action"] } },
-        { name: "cf_swarm", description: "Swarm operations", inputSchema: { type: "object", properties: { action: { type: "string", enum: ["init", "status", "shutdown", "health"] }, params: { type: "object" } }, required: ["action"] } },
-        { name: "cf_memory", description: "Memory operations", inputSchema: { type: "object", properties: { action: { type: "string", enum: ["store", "retrieve", "search", "delete", "list", "stats"] }, params: { type: "object" } }, required: ["action"] } },
-        { name: "cf_task", description: "Task operations", inputSchema: { type: "object", properties: { action: { type: "string", enum: ["create", "status", "list", "complete", "update", "cancel"] }, params: { type: "object" } }, required: ["action"] } },
-        { name: "cf_workflow", description: "Workflow operations", inputSchema: { type: "object", properties: { action: { type: "string", enum: ["create", "execute", "status", "list", "pause", "resume", "cancel", "delete", "template"] }, params: { type: "object" } }, required: ["action"] } },
-        { name: "cf_hooks", description: "Hooks & Intelligence", inputSchema: { type: "object", properties: { action: { type: "string" }, params: { type: "object" } }, required: ["action"] } },
-        { name: "cf_analyze", description: "Analysis operations", inputSchema: { type: "object", properties: { action: { type: "string" }, params: { type: "object" } }, required: ["action"] } },
-        { name: "cf_hive", description: "Hive-mind operations", inputSchema: { type: "object", properties: { action: { type: "string" }, params: { type: "object" } }, required: ["action"] } },
-        { name: "cf_execute", description: "Execute ANY tool", inputSchema: { type: "object", properties: { tool: { type: "string" }, params: { type: "object" } }, required: ["tool"] } },
-        { name: "aisp_status", description: "Get AISP enforcement status and configuration", inputSchema: { type: "object", properties: {} } }
-    ],
-    mapToRealTool: (metaTool, action) => {
-        const map = { cf_agent: 'agent', cf_swarm: 'swarm', cf_memory: 'memory', cf_task: 'task', cf_workflow: 'workflow', cf_hooks: 'hooks', cf_analyze: 'analyze', cf_hive: 'hive-mind' };
-        return map[metaTool] ? `${map[metaTool]}/${action}` : action;
     }
 };

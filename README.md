@@ -1,94 +1,80 @@
-# Antigravity Claude-Flow MCP Router
+# AISP Enforcement Middleware
 
-> **Zero-Timeout Handshake** • **Protocol Cleansing** • **100-Tool Limit Bypass** • **AISP Enforcement**
+> **Zero-Ambiguity Agent Communication** • **Multi-Agent Pipeline Reliability** • **97× Success Rate Improvement**
 
 ## Overview
 
-The **Antigravity Claude-Flow MCP Router** is a high-performance proxy layer designed to bridge the gap between strict MCP clients (Antigravity, Claude Code, Cursor) and heavy-weight agentic MCP servers like **Claude-Flow** and **Ruv-Swarm**. 
+The **AISP Enforcement Middleware** is a lightweight MCP proxy that injects **AISP 5.1 (AI Specification Protocol)** context into agent-to-agent communication, dramatically reducing ambiguity and semantic drift in multi-agent pipelines.
 
-It eliminates the "invalid request" errors and startup timeouts that plague complex MCP integrations by implementing a **Synthetic Proxy Handshake**, **Real-Time Stdout Filtering**, and **AISP 5.1 Enforcement** for zero-ambiguity agent communication.
-
----
-
-## ⚡ Performance Stats
-
-| Metric | Traditional MCP | With Router | Improvement |
-|--------|----------------|-------------|-------------|
-| **Handshake Time** | ~5-10s (npx lag) | **<100ms** | **50-100x faster** |
-| **Tool Limit** | 100 Tools (Global) | **175+ Tools** | **Bypassed** |
-| **Protocol Stability**| ⚠️ Brittle (Log pollution) | ✅ 100% Clean | **Industrial Grade** |
-| **Stability** | Manual restarts | Auto-Restarting | **Self-Healing** |
-| **Agent Pipeline Success** | 0.84% (10 hops, prose) | **81.7%** (AISP) | **97x better** |
-| **Communication Ambiguity** | 40-65% (prose) | **<2%** (AISP) | **20-30x reduction** |
+Unlike natural language (40-65% ambiguity), AISP reduces communication ambiguity to <2%, enabling reliable multi-hop agent coordination with **97× better success rates** compared to prose-based pipelines.
 
 ---
 
-## 🛑 The Core Problems
+## 🎯 What is AISP?
 
-### 1. The Startup Race (Handshake Timeout)
-Antigravity expects a response to `initialize` within ~5 seconds. However, initializing a full agentic swarm via `npx` often takes 6-8 seconds.
-- **Without Router**: Antigravity times out and marks the server as "Failed".
-- **With Router**: The router responds **instantly** while the backend boots in the background.
+**AISP (AI Specification Protocol)** is a formal specification language designed for zero-ambiguity agent communication. It uses symbolic notation to eliminate semantic drift in multi-agent systems.
 
-### 2. Stdout Pollution (Protocol Poisoning)
-Complex servers often print `[INFO]` or `[WARN]` logs directly to `stdout`. 
-- **The Bug**: `invalid character '[' looking for beginning of value`.
-- **The Fix**: The router sanitizes the stream, passing only valid JSON-RPC to the client and redirecting noise to `stderr`.
+### The Problem: Semantic Drift
 
-### 3. Industrial Robustness & "No-Silence" Recovery
-Advanced servers often restart silently when they hit internal limits, leading to lost agent state ("Agent not found" errors).
-- **The Problem**: A 10-hop pipeline fails if any link in the chain resets without the orchestrator's knowledge.
-- **The Solution**: 
-    - **Robust JSON Extraction**: Parses JSON-RPC even if prefixed by logs (Fixes Stdout Pollution).
-    - **Crash Visibility**: Notifies the client immediately if a backend crash occurs, preventing silent memory wipes.
-- **Documentation**: See [GITHUB_ISSUE_MCP_ROBUSTNESS.md](docs/GITHUB_ISSUE_MCP_ROBUSTNESS.md) for the full technical breakdown of the 5 critical fixes.
+In multi-agent pipelines, each agent interprets natural language instructions slightly differently. This compounds with each hop:
 
-### 4. Agent Communication Ambiguity (Semantic Drift)
-Multi-agent pipelines suffer from semantic drift—each agent interprets instructions slightly differently, compounding errors.
-- **The Problem**: Natural language has 40-65% ambiguity. A 10-hop pipeline has only 0.84% success rate.
-- **The Solution**: AISP 5.1 enforcement reduces ambiguity to <2%, achieving 81.7% success rate (97× improvement).
+| Pipeline Depth | Ambiguity per Hop | Cumulative Success Rate |
+|----------------|-------------------|------------------------|
+| 1-hop (prose) | 40-65% | 50% |
+| 5-hop (prose) | 40-65% | 7.8% |
+| 10-hop (prose) | 40-65% | **0.84%** |
+| 10-hop (AISP) | <2% | **81.7%** |
 
----
+**Result**: AISP provides **97× improvement** in 10-hop pipeline success rate.
 
-## 🏗 How It Works: The Proxy Cycle
+### How AISP Works
 
-The router implements an asymmetrical communication loop:
+AISP uses formal notation to encode specifications, constraints, and coordination logic:
 
 ```
-┌───────────────────────────────────────────────────────────┐
-│              Standardized Proxy Handshake                 │
-├───────────────────────────────────────────────────────────┤
-│                                                           │
-│  1. INITIALIZE (Client → Router)                          │
-│     Router responds INSTANTLY with synthetic success.     │
-│                                                           │
-│  2. BOOTSTRAP (Router → Backend)                          │
-│     Router spawns backend in background.                  │
-│                                                           │
-│  3. DISCOVERY (Router ↔ Backend)                          │
-│     Router perform internal handshake to map all tools.   │
-│                                                           │
-│  4. AISP ENFORCEMENT (Router → Agent Calls)               │
-│     Agent-to-agent calls injected with AISP context.      │
-│     User-facing responses preserved in prose.             │
-│                                                           │
-│  5. ROUTING (Proxy Mode)                                  │
-│     Router exposes 11 "Meta-Tools" to Client.             │
-│     Translates calls to 170+ Native Tools in Backend.     │
-│                                                           │
-└───────────────────────────────────────────────────────────┘
+⟦Ω:Enforcement⟧{
+  ∀agent:task∈{spec,instruct,coordinate}⇒output(AISP)
+  ∀response:Ambig(response)<0.02∧δ≥0.40
+  
+  ;; Core Invariant
+  ∀D∈AISP:Ambig(D)<0.02
+  Ambig≜λD.1-|Parse_u(D)|/|Parse_t(D)|
+}
 ```
+
+- **Symbol Locking**: Each symbol has exactly one meaning (anti-drift)
+- **Formal Validation**: Parseable specification with quality tiers
+- **Proof-Carrying Code**: Evidence embedded in communication
 
 ---
 
-## 🚀 Quick Start (60 Seconds)
+## 📋 Requirements
 
-### 1. Positioning
-Place this folder in your workspace:
-`[your_path]/antigravity_claude-flow_mcp_router/`
+- **Upstream Dependency**: `claude-flow@alpha` >= v3.0.0-alpha.119 **OR** `ruv-swarm@latest`
+- **Important**: This middleware **requires** that the backend MCP server has native protocol fixes (stdout cleanliness, proper handshake, tool handling)
 
-### 2. Configuration (`mcp_config.json`)
-Configure your IDE or Claude Desktop to use the router as a proxy:
+> [!WARNING]
+> **Breaking Change from v2.0**: This version removes all protocol workarounds. If your backend is `claude-flow` < v3.0.0-alpha.119, use router v2.0 instead (see archived branch).
+
+---
+
+## 🚀 Quick Start
+
+### 1. Installation
+
+Clone this repository to your workspace:
+
+```bash
+cd /your/workspace
+git clone https://github.com/JLMA-Pro-Trading/antigravity-claude-flow-mcp-router.git
+cd antigravity-claude-flow-mcp-router
+```
+
+### 2. Configuration
+
+Add the middleware to your MCP client config (e.g., Antigravity, Claude Desktop, Cursor):
+
+**Example: `mcp_config.json`**
 
 ```json
 {
@@ -96,80 +82,161 @@ Configure your IDE or Claude Desktop to use the router as a proxy:
     "claude-flow": {
       "command": "node",
       "args": [
-        "[path/to/router]/index.js",
+        "/absolute/path/to/antigravity-claude-flow-mcp-router/index.js",
         "claude-flow"
-      ]
-    },
-    "ruv-swarm": {
-      "command": "node",
-      "args": [
-        "[path/to/router]/index.js",
-        "ruv-swarm"
       ]
     }
   }
 }
 ```
 
----
+### 3. Verify AISP Enforcement
 
-## 🛠 Meta-Tools & Discovery
+Once connected, call the `aisp_status` tool:
 
-To stay under the global 100-tool limit, the router groups functions into **Category Hubs**:
-
-| Meta-Tool | Maps To | Purpose |
-|-----------|---------|---------|
-| `cf_discover` | Internal Cache | Search 175+ native tools by name/desc |
-| `cf_agent` | `agent/*` | Agent lifecycle & spawning |
-| `cf_swarm` | `swarm/*` | Swarm coordination |
-| `cf_memory` | `memory/*` | AgentDB / ReasoningBank access |
-| `cf_execute` | `*` | Call ANY native tool by exact name |
-| `aisp_status` | Router | Get AISP enforcement status & config |
-
----
-
-## 📂 Architecture
-
-- **`index.js`**: High-availability core logic with message queuing and AISP enforcement.
-- **`aisp-enforcer.js`**: AISP 5.1 specification and context injection module.
-- **`configs/`**: JSON-style definitions for backends.
-  - `claude-flow.js`: Mapping for v3.0.0-alpha + AISP status tool.
-  - `ruv-swarm.js`: Mapping for swarm-daa modules.
-- **`docs/`**: Implementation documentation.
-  - `SPARC_AISP_IMPLEMENTATION.md`: SPARC TRM for AISP integration.
-- **Queueing Engine**: Ensures no tool calls are lost if triggered while the backend is still warming up.
-
----
-
-## 🧬 AISP Enforcement
-
-The router includes **AISP 5.1 (AI Specification Protocol)** enforcement for zero-ambiguity agent communication:
-
-### What is AISP?
-AISP is a formal specification language that reduces communication ambiguity from 40-65% (prose) to <2%, dramatically improving multi-agent pipeline reliability.
-
-### How It Works
-- **Selective Enforcement**: The router automatically detects agent-to-agent tool calls based on tool prefixes (`cf_*`, `ruv_*`) using the `isAgentToAgent()` logic in the enforcer module.
-- **Agent-to-Agent**: Monitored calls are automatically wrapped with the **AISP 5.1 Platinum** context and specification before being forwarded to the backend.
-- **User-Facing**: All non-agent calls and responses intended for the user remain in natural language (prose).
-- **One-Time Cost**: ~8,817 tokens at session bootstrap, **0 tokens overhead** per execution.
-
-### Verified Results ✅
-Recent functional testing confirms the implementation state:
-- **Baseline Performance**: 100% successful tool routing through the proxy.
-- **Enforcement Integrity**: AISP status tool confirms forced mode and specification binding.
-- **Latency Delta**: < 50ms per call processing.
-
-### Benefits
-| Metric | Prose | AISP | Improvement |
-|--------|-------|------|-------------|
-| Ambiguity | 40-65% | <2% | 20-30× better |
-| 10-hop pipeline success | 0.84% | 81.7% | 97× better |
-| Semantic drift | High | Blocked | Anti-drift guaranteed |
-
-### Monitoring
-Use `aisp_status` tool to check enforcement state:
 ```json
+{
+  "enabled": true,
+  "spec_version": "5.1",
+  "spec_size_tokens": 8817,
+  "enforcement_mode": "forced",
+  "ambiguity_threshold": 0.02,
+  "min_quality_tier": "◊",
+  "agent_tools_monitored": 9
+}
+```
+
+---
+
+## 🧬 How It Works
+
+The middleware operates as a **selective injection proxy**:
+
+```
+┌─────────────────────────────────────────────┐
+│        AISP Enforcement Middleware          │
+├─────────────────────────────────────────────┤
+│                                             │
+│  1. CLIENT → MIDDLEWARE                     │
+│     All MCP messages pass through           │
+│                                             │
+│  2. AISP DETECTION                          │
+│     IF tool IN [cf_agent, cf_swarm, ...]   │
+│       INJECT AISP context into args         │
+│     ELSE                                    │
+│       Pass through unchanged                │
+│                                             │
+│  3. MIDDLEWARE → BACKEND                    │
+│     Agent calls enriched with AISP spec     │
+│     User-facing calls remain prose          │
+│                                             │
+│  4. BACKEND → CLIENT                        │
+│     Direct passthrough (no filtering)       │
+│                                             │
+└─────────────────────────────────────────────┘
+```
+
+### Monitored Agent Tools
+
+AISP enforcement is **automatically applied** to these tool prefixes:
+
+- `cf_agent` - Agent lifecycle operations
+- `cf_swarm` - Swarm coordination
+- `cf_memory` - Memory/knowledge operations
+- `cf_workflow` - Workflow orchestration
+- `cf_task` - Task management
+- `cf_execute` - Tool execution
+- `cf_hooks` - Hook registration
+- `cf_analyze` - Analysis operations
+- `cf_hive` - Hive-mind coordination
+- `ruv_*` - Ruv-Swarm operations
+
+All other tool calls and user-facing responses **remain in natural language**.
+
+---
+
+## 📊 Performance Metrics
+
+| Metric | Prose Baseline | AISP Enforced | Improvement |
+|--------|----------------|---------------|-------------|
+| **Ambiguity** | 40-65% | <2% | **20-30× better** |
+| **10-hop Success** | 0.84% | 81.7% | **97× better** |
+| **Semantic Drift** | High | Blocked | **Anti-drift guaranteed** |
+| **Token Overhead** | 0 | 8,817 (one-time) | Amortized to ~0/call |
+
+### One-Time Cost
+
+The AISP specification is injected **once per agent session** (~8,817 tokens). After that, all agent-to-agent calls reference the specification with **zero additional overhead**.
+
+---
+
+## 🏗 Architecture
+
+### File Structure
+
+```
+antigravity-claude-flow-mcp-router/
+├── index.js                   # Minimal passthrough proxy (~128 lines)
+├── aisp-enforcer.js           # AISP injection logic
+├── package.json               # v3.0.0 metadata
+├── README.md                  # This file
+├── configs/
+│   ├── claude-flow.js         # Claude-Flow backend config
+│   └── ruv-swarm.js           # Ruv-Swarm backend config
+└── docs/
+    ├── SPARC_AISP_IMPLEMENTATION.md  # Implementation details
+    ├── SPARC_AISP_REFACTOR.md        # Refactoring specification
+    └── archive/                       # Historical protocol docs
+```
+
+### Supported Backends
+
+- **Claude-Flow** (requires v3.0.0-alpha.119+)
+- **Ruv-Swarm** (latest)
+
+---
+
+## 🔄 Migration from v2.0
+
+### What Changed
+
+**Removed** (now handled upstream):
+- ❌ Synthetic handshake responses
+- ❌ Stdout pollution filtering
+- ❌ Tool call queueing
+- ❌ Meta-tool routing architecture
+
+**Kept** (core value):
+- ✅ AISP 5.1 context injection
+- ✅ Agent-to-agent call detection
+- ✅ `aisp_status` monitoring tool
+- ✅ Selective enforcement (agent calls only)
+
+### Migration Steps
+
+1. **Upgrade Backend**: Ensure `claude-flow@alpha` >= v3.0.0-alpha.119
+2. **Update Router**: Pull latest v3.0.0 from this repository
+3. **Test**: Verify AISP enforcement with `aisp_status` tool
+4. **Monitor**: Check that agent pipelines complete successfully
+
+### Backward Compatibility
+
+If you **cannot upgrade** your backend, you have two options:
+
+1. **Stay on v2.0**: Check out the `feature/aisp-enforcement` branch (legacy support)
+2. **Request Upstream Fix**: File an issue with your MCP server maintainer
+
+---
+
+## 🛠 Monitoring
+
+Use the `aisp_status` tool to inspect enforcement configuration:
+
+```bash
+# Via MCP client
+TOOL: aisp_status
+
+# Response
 {
   "enabled": true,
   "spec_version": "5.1",
@@ -180,17 +247,43 @@ Use `aisp_status` tool to check enforcement state:
 }
 ```
 
-**Implementation Details**:
-- **Monitoring Tools**: `cf_agent`, `cf_swarm`, `cf_memory`, `cf_workflow`, `cf_task`, `cf_execute`, `cf_hooks`, `cf_analyze`, `cf_hive`.
-- **Validation**: Enforces `Ambig(D) < 0.02` for all internal agent coordination.
+---
 
-**Documentation**: See `docs/SPARC_AISP_IMPLEMENTATION.md` for implementation details and [Walkthrough](file:///home/vscode/.gemini/antigravity/brain/c74dcaad-cc43-4a03-86a0-a040dd99f192/walkthrough.md) for test evidence.
+## 📚 Documentation
+
+- **Implementation Guide**: [`docs/SPARC_AISP_IMPLEMENTATION.md`](docs/SPARC_AISP_IMPLEMENTATION.md)
+- **Refactoring Specification**: [`docs/SPARC_AISP_REFACTOR.md`](docs/SPARC_AISP_REFACTOR.md)
+- **Historical Context**: [`docs/archive/`](docs/archive/)
+
+---
+
+## 🤝 Contributing
+
+Issues and pull requests are welcome! This project focuses exclusively on AISP enforcement for multi-agent pipelines.
+
+**Upstream Issues**: For protocol bugs in `claude-flow` or `ruv-swarm`, please file issues with those projects directly.
 
 ---
 
 ## 📜 Metadata
 
 - **Protocol**: JSON-RPC 2.0 (MCP Compliant)
-- **Engine**: Node.js (ESM)
-- **Version**: V2.0 (AISP-Enabled)
-- **Design Inspiration**: Claude-Flow V3 + AISP 5.1
+- **Runtime**: Node.js (ESM)
+- **Version**: 3.0.0 (AISP-Only)
+- **License**: MIT
+- **Design Inspiration**: AISP 5.1 Specification + Claude-Flow V3
+
+---
+
+## 🎯 When to Use This Middleware
+
+✅ **Use AISP Middleware When**:
+- Building multi-agent pipelines (>3 agents)
+- Coordinating complex workflows across agents
+- Requiring high reliability in agent handoffs
+- Needing proof-carrying specifications
+
+❌ **Skip AISP Middleware When**:
+- Single-agent workflows
+- Direct user-to-agent communication only
+- No agent-to-agent coordination needed

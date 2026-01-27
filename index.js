@@ -46,7 +46,8 @@ let nextInternalId = 5000;
 function startBackend() {
     process.stderr.write(`[${config.name}] Starting backend...\n`);
     backendProcess = spawn(config.backendCommand, config.backendArgs, {
-        stdio: ['pipe', 'pipe', 'pipe']
+        stdio: ['pipe', 'pipe', 'pipe'],
+        env: { ...process.env, ...(config.backendEnv || {}) }
     });
 
     backendProcess.stdout.on('data', handleBackendStdout);

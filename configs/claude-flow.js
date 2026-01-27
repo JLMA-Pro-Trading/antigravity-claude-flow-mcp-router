@@ -2,6 +2,10 @@ export default {
     name: "claude-flow",
     backendCommand: "npx",
     backendArgs: ["-y", "claude-flow@alpha", "mcp", "start"],
+    backendEnv: {
+        CLAUDE_FLOW_MODE: "v3",
+        CLAUDE_FLOW_MEMORY_BACKEND: "hybrid"
+    },
     routerTools: [
         { name: "cf_discover", description: "List all available claude-flow tools by category or search.", inputSchema: { type: "object", properties: { category: { type: "string" }, search: { type: "string" } } } },
         { name: "cf_agent", description: "Agent operations", inputSchema: { type: "object", properties: { action: { type: "string", enum: ["spawn", "terminate", "status", "list", "pool", "health", "update"] }, params: { type: "object" } }, required: ["action"] } },

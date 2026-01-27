@@ -9,8 +9,8 @@
 
 export default {
     name: "claude-flow",
-    backendCommand: "npx",
-    backendArgs: ["-y", "claude-flow@alpha", "mcp", "start"],
+    backendCommand: "claude-flow",
+    backendArgs: ["mcp", "start"],
     backendEnv: {
         CLAUDE_FLOW_MODE: "v3",
         CLAUDE_FLOW_MEMORY_BACKEND: "hybrid"

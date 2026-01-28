@@ -1,0 +1,7 @@
+{
+    "name": "antigravity_claude-flow_mcp_router",
+    "version": "1.0.0",
+    "description": "Universal Guard & Router for MCP Servers (Fixes logs, timeouts, and tool limits)",
+    "main": "index.js",
+    "type": "module"
+}

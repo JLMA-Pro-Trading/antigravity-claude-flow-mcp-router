@@ -16,6 +16,6 @@ export default {
     ],
     mapToRealTool: (metaTool, action) => {
         const map = { cf_agent: 'agent', cf_swarm: 'swarm', cf_memory: 'memory', cf_task: 'task', cf_workflow: 'workflow', cf_hooks: 'hooks', cf_analyze: 'analyze', cf_hive: 'hive-mind' };
-        return map[metaTool] ? `${map[metaTool]}/${action}` : action;
+        return map[metaTool] ? `${map[metaTool]}_${action}` : action;
     }
 };

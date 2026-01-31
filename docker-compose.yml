@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  mcp-router:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"   # Main router port
+      - "3001:3001"   # Health check port
+    environment:
+      - NODE_ENV=production
+      - HEALTH_PORT=3001
+      - LOG_LEVEL=info
+    volumes:
+      # Mount configs as read-only
+      - ./configs:/app/configs:ro
+      # Optional: Mount logs directory
+      - ./logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.1'
+          memory: 128M
+
+  # Optional: Nginx reverse proxy for load balancing
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - mcp-router
+    restart: unless-stopped
+    profiles:
+      - with-proxy
+
+networks:
+  default:
+    name: mcp-router-network

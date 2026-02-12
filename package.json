@@ -58,5 +58,8 @@
         "configs/",
         "tests/",
         "README.md"
-    ]
+    ],
+    "devDependencies": {
+        "c8": "^10.1.3"
+    }
 }

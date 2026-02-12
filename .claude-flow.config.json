@@ -1,0 +1,12 @@
+{
+  "extends": "../../.claude-flow/config.yaml",
+  "metadata": {
+    "migratedFrom": "symlink",
+    "originalTarget": "/workspaces/jlmaworkspace/.claude-flow",
+    "migratedAt": "2026-02-06T11:25:06+00:00",
+    "migratedBy": "config-inheritance-system"
+  },
+  "swarm": {
+    "inheritFromParent": true
+  }
+}
